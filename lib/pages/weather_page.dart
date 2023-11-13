@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:weather_app/helpers/text_helper.dart';
 import 'package:weather_app/models/weather_model.dart';
 import 'package:weather_app/services/weather_service.dart';
 
@@ -43,8 +44,18 @@ class _WeatherPageState extends State<WeatherPage> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextHepler.primaryText(
+              text: _weather?.cityName ?? 'loading city....',
+            ),
+            TextHepler.primaryText(
+              text: "${_weather?.temperature.round().toString()}°C" ?? "",
+            ),
+          ],
+        ),
       ),
     );
   }
