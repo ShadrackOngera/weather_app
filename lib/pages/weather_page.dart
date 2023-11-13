@@ -3,6 +3,7 @@ import 'package:lottie/lottie.dart';
 import 'package:weather_app/helpers/text_helper.dart';
 import 'package:weather_app/models/weather_model.dart';
 import 'package:weather_app/services/weather_service.dart';
+import 'package:weather_app/widgets/app_drawer.dart';
 
 class WeatherPage extends StatefulWidget {
   const WeatherPage({super.key});
@@ -12,8 +13,7 @@ class WeatherPage extends StatefulWidget {
 }
 
 class _WeatherPageState extends State<WeatherPage> {
-  //api Key
-
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final _weatherService = WeatherService('f58993605f9dd877ab9a895a44207ada');
   Weather? _weather;
 
@@ -69,24 +69,46 @@ class _WeatherPageState extends State<WeatherPage> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextHepler.primaryText(
-              text: _weather?.cityName ?? 'loading city....',
+      key: _scaffoldKey, // Assign the key to the Scaffold
+      drawer: AppDrawer(),
+      body: Stack(
+        children: [
+          Positioned(
+            top: 10,
+            left: 10,
+            child: SafeArea(
+              child: InkWell(
+                onTap: () {
+                  _scaffoldKey.currentState!
+                      .openDrawer(); // Access Scaffold state using the key
+                },
+                child: Icon(
+                  Icons.menu,
+                  color: Colors.brown.shade900,
+                ),
+              ),
             ),
-            TextHepler.primaryText(
-              text: _weather?.mainCondition ?? 'loading condition....',
+          ),
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextHepler.primaryText(
+                  text: _weather?.cityName ?? 'loading city....',
+                ),
+                TextHepler.primaryText(
+                  text: _weather?.mainCondition ?? 'loading condition....',
+                ),
+                Lottie.asset(
+                  getWeatherCondition(_weather?.mainCondition),
+                ),
+                TextHepler.primaryText(
+                  text: "${_weather?.temperature.round().toString()}°C" ?? "",
+                ),
+              ],
             ),
-            Lottie.asset(
-              getWeatherCondition(_weather?.mainCondition),
-            ),
-            TextHepler.primaryText(
-              text: "${_weather?.temperature.round().toString()}°C" ?? "",
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
