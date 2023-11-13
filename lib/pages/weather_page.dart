@@ -14,7 +14,7 @@ class WeatherPage extends StatefulWidget {
 class _WeatherPageState extends State<WeatherPage> {
   //api Key
 
-  final _weatherService = WeatherService('apiKey');
+  final _weatherService = WeatherService('f58993605f9dd877ab9a895a44207ada');
   Weather? _weather;
 
   //fetch Weather
@@ -36,6 +36,30 @@ class _WeatherPageState extends State<WeatherPage> {
   }
 
   //animations
+  String getWeatherCondition(String? mainCondition) {
+    if (mainCondition == null) {
+      return 'assets/lottie/cloud.json';
+    }
+
+    switch (mainCondition.toLowerCase()) {
+      case 'clouds':
+      case 'mist':
+      case 'smoke':
+      case 'haze':
+      case 'dust':
+      case 'fog':
+        return "assets/lottie/cloud.json";
+      case 'rain':
+      case 'drizzle':
+      case 'shower rain':
+        return "assets/lottie/rain.json";
+      case 'clear':
+        return "assets/lottie/sunny.json";
+      default:
+        return "assets/lottie/sunny.json";
+    }
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -52,8 +76,11 @@ class _WeatherPageState extends State<WeatherPage> {
             TextHepler.primaryText(
               text: _weather?.cityName ?? 'loading city....',
             ),
+            TextHepler.primaryText(
+              text: _weather?.mainCondition ?? 'loading condition....',
+            ),
             Lottie.asset(
-              'assets/lottie/cloud.json',
+              getWeatherCondition(_weather?.mainCondition),
             ),
             TextHepler.primaryText(
               text: "${_weather?.temperature.round().toString()}°C" ?? "",
