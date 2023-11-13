@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:weather_app/helpers/text_helper.dart';
 import 'package:weather_app/models/weather_model.dart';
 import 'package:weather_app/services/weather_service.dart';
@@ -50,6 +51,9 @@ class _WeatherPageState extends State<WeatherPage> {
           children: [
             TextHepler.primaryText(
               text: _weather?.cityName ?? 'loading city....',
+            ),
+            Lottie.asset(
+              'assets/lottie/cloud.json',
             ),
             TextHepler.primaryText(
               text: "${_weather?.temperature.round().toString()}°C" ?? "",
